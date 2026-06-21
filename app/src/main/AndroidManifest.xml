@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 문자 발송 권한 -->
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <!-- 연락처에서 수신자 선택을 위한 권한 -->
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <!-- 재부팅 후에도 예약을 복원하기 위한 권한 -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <!-- 매월 정확한 날짜/시간에 알람을 울리기 위한 권한 (Android 12+) -->
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
+    <!-- 절전 모드에서도 알람이 동작하도록 -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/Theme.MonthlySms"
+        android:supportsRtl="true">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".EditScheduleActivity"
+            android:exported="false"
+            android:label="@string/edit_schedule_title" />
+
+        <!-- 알람이 울렸을 때 실제로 SMS를 보내는 리시버 -->
+        <receiver
+            android:name=".SmsAlarmReceiver"
+            android:exported="false" />
+
+        <!-- 재부팅 시 모든 예약을 다시 등록하는 리시버 -->
+        <receiver
+            android:name=".BootReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
+        </receiver>
+
+    </application>
+
+</manifest>
